@@ -11,7 +11,7 @@ import {
 } from "permissionless/clients/pimlico";
 import { Hex, createPublicClient, http } from "viem";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { sepolia } from "viem/chains";
+import { blastSepolia } from "viem/chains";
 
 const apiKey = "850080d0-7198-471f-87ec-e8be98f8feba";
 const paymasterUrl = `https://api.pimlico.io/v2/168587773/rpc?apikey=${apiKey}`;
@@ -45,7 +45,7 @@ console.log(
   `Smart account address: https://sepolia.blastscan.io/address/${account.address}`
 );
 
-const bundlerUrl = `https://api.pimlico.io/v2/sepolia/rpc?apikey=${apiKey}`;
+const bundlerUrl = `https://api.pimlico.io/v2/168587773/rpc?apikey=${apiKey}`;
 
 const bundlerClient = createPimlicoBundlerClient({
   transport: http(bundlerUrl),
@@ -55,7 +55,7 @@ const bundlerClient = createPimlicoBundlerClient({
 const smartAccountClient = createSmartAccountClient({
   account,
   entryPoint: ENTRYPOINT_ADDRESS_V07,
-  chain: sepolia,
+  chain: blastSepolia,
   bundlerTransport: http(bundlerUrl),
   middleware: {
     gasPrice: async () => {
@@ -65,12 +65,12 @@ const smartAccountClient = createSmartAccountClient({
   },
 });
 
-const date = Date.now();
+const sendingTxTime = Date.now();
 const txHash = await smartAccountClient.sendTransaction({
   to: "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
   value: 0n,
   data: "0x1234",
 });
 
-console.log("Time spent", Date.now() - date);
+console.log("Time spent", Date.now() - sendingTxTime);
 console.log(txHash);
